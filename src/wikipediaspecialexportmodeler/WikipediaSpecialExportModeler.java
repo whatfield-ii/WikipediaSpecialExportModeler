@@ -59,9 +59,9 @@ public class WikipediaSpecialExportModeler {
         SSTC = new StanfordSpeechTaggerAndCounter();
         //
         System.out.println("processing export files ...");
-        //initWikipediaSpecialExportProcessor();
+        initWikipediaSpecialExportProcessor();
         System.out.println("tagging refined xml");
-        //parseAndTagProcessedExportTexts();
+        parseAndTagProcessedExportTexts();
         //
         System.out.println("training the object model");
         trainModelsFromTaggedText(TAGGED_OBJECTS, MODEL_OF_OBJECTS);
@@ -71,6 +71,8 @@ public class WikipediaSpecialExportModeler {
         trainModelsFromTaggedText(TAGGED_MEN, MODEL_OF_MEN);
         //
         System.out.println("Training Complete - Have A Good Day!");
+        //
+        
     }
     
     private static void initWikipediaSpecialExportProcessor() {
@@ -189,7 +191,7 @@ public class WikipediaSpecialExportModeler {
                 }
             }
             // compute the probabilities of the model and save the model
-            tcpm.computeTheTermProbabilites();
+            tcpm.computeTheTermProbabilites(10);
             System.out.println(tcpm.toString());
             tcpm.serializeTermCountProbabilityModel(modelName);
         }

@@ -103,9 +103,10 @@ public class TermCountProbabilityModel implements Serializable {
      * represents the probability (similarity) of the passed model to this one.
      * 
      * @param tcpm
+     * @param vocab
      * @return 
      */
-    public double getClassificationProbability(TermCountProbabilityModel tcpm) {
+    public double getClassProbability(TermCountProbabilityModel tcpm, int vocab) {
         double probability = 1.0;
         for (Entry<String, CountProbabilityPair> entry : tcpm.MODEL.entrySet()) {
             if (this.MODEL.containsKey(entry.getKey())) {
@@ -114,7 +115,7 @@ public class TermCountProbabilityModel implements Serializable {
                 double termProbability = thisTermProb * tcpmTermProb;
                 probability = probability * termProbability;
             } else {
-                double multiplier = 1.0 / (MODEL.size() + totalTermCount);
+                double multiplier = 1.0 / (vocab + totalTermCount);
                 probability = probability * multiplier;
             }
         }
@@ -171,10 +172,10 @@ public class TermCountProbabilityModel implements Serializable {
      * probability of the term (key) in the element by dividing the individual
      * term count over the total term count, then stores the result in model.
      */
-    public void computeTheTermProbabilites() {
+    public void computeTheTermProbabilites(int vocab) {
         for (Entry<String, CountProbabilityPair> entry : MODEL.entrySet()) {
             double termCount = (double) entry.getValue().count;
-            double probability = termCount / totalTermCount;
+            double probability = (termCount + 1) / (totalTermCount + vocab);
             entry.getValue().prob = probability;
         }
     }
